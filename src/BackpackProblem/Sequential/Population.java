@@ -14,7 +14,7 @@ public class Population {
     public static final int MUTATION_FACTOR = 10; // in range 0 to 100
     public static final int CROSSING_FACTOR = 50; // in range 1 to COUNT_OF_POPULATION
     public static final int CAPACITY = 250; // max weight of backpack
-    private static final int STOP_CONDITION = 100; // count of the same results in a row
+    private static final int STOP_CONDITION = 10000; // number of total iteration
 
     private Crossover cross;
     private Mutation mutation;
@@ -37,7 +37,7 @@ public class Population {
     public void start() {
         //System.out.println("Iteration \t weight \t cost");
         initPopulation();
-        while (sameCostWeightCount < STOP_CONDITION){
+        while (iteration < STOP_CONDITION){
             int indexOfSetMaxCost = Utils.findSetWithMaxCost(this);
 
             int random;
