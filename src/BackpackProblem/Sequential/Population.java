@@ -48,7 +48,7 @@ public class Population {
             Boolean[] parent1 = currentPopulation[indexOfSetMaxCost];
             Boolean[] parent2 = currentPopulation[random];
 
-            Boolean[] child1 = cross.crossover(parent1, parent2, true);
+            Boolean[] child1 = cross.getChild(parent1, parent2);
             child1 = mutation.mutate(child1);
             child1 = improvement.improve(child1);
 
@@ -59,7 +59,7 @@ public class Population {
                 setPopulation(child1, indexOfSetLessWeight);
             }
 
-            Boolean[] child2 = cross.crossover(parent1, parent2, false);
+            Boolean[] child2 = cross.getChild(parent2, parent1);
             child2 = mutation.mutate(child2);
             child2 = improvement.improve(child2);
 
