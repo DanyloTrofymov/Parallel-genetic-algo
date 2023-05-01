@@ -11,17 +11,16 @@ public class Mutation {
         this.population = population;
     }
 
-    public void mutate(int childIndex){
+    public Boolean[] mutate(Boolean[] child){
         int mutation = (int) (Math.random() * 101);
         int itemToChange = (int) (Math.random() * Item.COUNT_OF_ITEMS);
         if(mutation <= Population.MUTATION_FACTOR){
-            Boolean[] temp = new Boolean[Item.COUNT_OF_ITEMS];
-            System.arraycopy(population.currentPopulation[childIndex], 0, temp, 0, Item.COUNT_OF_ITEMS);
-            temp[itemToChange] = !temp[itemToChange];
-            if(calculateWeightOfSet(temp) <= Population.CAPACITY){
-                population.currentPopulation[childIndex][itemToChange] = temp[itemToChange];
+            child[itemToChange] = !child[itemToChange];
+            if(calculateWeightOfSet(child) > Population.CAPACITY){
+                child[itemToChange] = !child[itemToChange];
             }
         }
+        return child;
     }
 
     private int calculateWeightOfSet(Boolean[] set){

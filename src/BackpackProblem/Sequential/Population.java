@@ -16,22 +16,26 @@ public class Population {
     public static final int CAPACITY = 250; // max weight of backpack
     private static final int STOP_CONDITION = 100; // count of the same results in a row
 
+    private Crossover cross;
+    private Mutation mutation;
+    private LocalImprovement improvement;
+
     public List<Item> items;
     public Boolean[][] currentPopulation;
-    int sameCostWeightCount = 0;
-    int lastCost = 0;
-    int lastWeight = 0;
+    private int sameCostWeightCount = 0;
+    private int lastCost = 0;
+    private int lastWeight = 0;
 
     int iteration = 0;
     public Population(List<Item> items) {
         this.items = items;
         this.currentPopulation = new Boolean[COUNT_OF_POPULATIONS][Item.COUNT_OF_ITEMS];
+        cross = new Crossover(this);
+        mutation = new Mutation(this);
+        improvement = new LocalImprovement(this);
     }
     public void start() {
         //System.out.println("Iteration \t weight \t cost");
-        Crossover cross = new Crossover(this);
-        Mutation mutation = new Mutation(this);
-        LocalImprovement improvement = new LocalImprovement(this);
         initPopulation();
         while (sameCostWeightCount < STOP_CONDITION){
             List<Integer> childrenIndexes= new ArrayList<>();
@@ -44,19 +48,28 @@ public class Population {
             Boolean[] parent1 = currentPopulation[indexOfSetMaxCost];
             Boolean[] parent2 = currentPopulation[random];
 
-            int index = cross.crossover(parent1, parent2, true);
-            if(index != -1){
-                childrenIndexes.add(index);
-            }
-            index = cross.crossover(parent1, parent2, false);
-            if(index != -1){
-                childrenIndexes.add(index);
+            Boolean[] child1 = cross.crossover(parent1, parent2, true);
+            child1 = mutation.mutate(child1);
+            child1 = improvement.improve(child1);
+
+            int child1Weight = Utils.calculateWeightOfSet(this, child1);
+            int indexOfSetLessWeight = Utils.findSetWithMinWeight(this);
+
+            if(canInsert(child1Weight, indexOfSetLessWeight)){
+                setPopulation(child1, indexOfSetLessWeight);
             }
 
-            for (Integer childrenIndex : childrenIndexes) {
-                mutation.mutate(childrenIndex);
-                improvement.improve(childrenIndex);
+            Boolean[] child2 = cross.crossover(parent1, parent2, false);
+            child2 = mutation.mutate(child2);
+            child2 = improvement.improve(child2);
+
+            int child2Weight = Utils.calculateWeightOfSet(this, child2);
+            indexOfSetLessWeight = Utils.findSetWithMinWeight(this);
+
+            if(canInsert(child2Weight, indexOfSetLessWeight)){
+                setPopulation(child2, indexOfSetLessWeight);
             }
+
             checkResult();
             iteration++;
             /*if (iteration % 100 == 0) {
@@ -92,5 +105,16 @@ public class Population {
             lastCost = newMaxCost;
             lastWeight = newWeight;
         }
+    }
+
+    private void setPopulation(Boolean[] set, int indexOfSet){
+        System.arraycopy(set, 0, this.currentPopulation[indexOfSet], 0, Item.COUNT_OF_ITEMS);
+    }
+
+    private boolean canInsert(int currentWeight, int lessWeightIndex){
+        if(currentWeight <= Population.CAPACITY && currentWeight >= Utils.calculateWeightOfSet(this, this.currentPopulation[lessWeightIndex])){
+            return true;
+        }
+        return false;
     }
 }
