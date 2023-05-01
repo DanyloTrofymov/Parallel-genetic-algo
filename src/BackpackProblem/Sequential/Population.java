@@ -15,20 +15,23 @@ public class Population {
 
     public List<Item> items;
     public Boolean[][] currentPopulation;
-    int sameCostWeightCount = 0;
-    int lastCost = 0;
-    int lastWeight = 0;
+    public Crossover cross;
+    public Mutation mutation;
+    public LocalImprovement improvement;
+    private int sameCostWeightCount = 0;
+    private int lastCost = 0;
+    private int lastWeight = 0;
 
-    int iteration = 0;
+    private int iteration = 0;
     public Population(List<Item> items) {
         this.items = items;
         this.currentPopulation = new Boolean[COUNT_OF_POPULATIONS][Item.COUNT_OF_ITEMS];
+        cross = new Crossover(this);
+        mutation = new Mutation(this);
+        improvement = new LocalImprovement(this);
     }
     public void start() {
         //System.out.println("Iteration \t weight \t cost");
-        Crossover cross = new Crossover(this);
-        Mutation mutation = new Mutation(this);
-        LocalImprovement improvement = new LocalImprovement(this);
         initPopulation();
         while (sameCostWeightCount < STOP_CONDITION){
             int indexOfSetMaxCost = Utils.findSetWithMaxCost(this);
@@ -40,9 +43,9 @@ public class Population {
             Boolean[] parent1 = this.currentPopulation[indexOfSetMaxCost];
             Boolean[] parent2 = this.currentPopulation[random];
 
-            EvolutionThread evolutionThread = new EvolutionThread(this, parent1, parent2, true, cross, mutation, improvement);
+            EvolutionThread evolutionThread = new EvolutionThread(this, parent1, parent2, true);
             evolutionThread.start();
-            EvolutionThread evolutionThread2 = new EvolutionThread(this, parent1, parent2, false, cross, mutation, improvement);
+            EvolutionThread evolutionThread2 = new EvolutionThread(this, parent1, parent2, false);
             evolutionThread2.start();
 
             try {
@@ -87,4 +90,5 @@ public class Population {
             lastWeight = newWeight;
         }
     }
+
 }
