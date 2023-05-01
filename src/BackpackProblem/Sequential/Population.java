@@ -74,6 +74,7 @@ public class Population {
                 System.out.println(iteration + "\t\t\t" + lastWeight + "\t\t\t" + lastCost);
             }*/
         }
+        System.out.println("lastCost: " + lastCost +  " lastWeight: " + lastWeight);
         executorService.shutdown();
         /*
         System.out.println("Result: ");
