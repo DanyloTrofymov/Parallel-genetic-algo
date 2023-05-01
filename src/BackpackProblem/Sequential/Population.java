@@ -38,7 +38,6 @@ public class Population {
         //System.out.println("Iteration \t weight \t cost");
         initPopulation();
         while (sameCostWeightCount < STOP_CONDITION){
-            List<Integer> childrenIndexes= new ArrayList<>();
             int indexOfSetMaxCost = Utils.findSetWithMaxCost(this);
 
             int random;

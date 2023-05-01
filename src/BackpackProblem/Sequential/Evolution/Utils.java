@@ -3,6 +3,9 @@ package BackpackProblem.Sequential.Evolution;
 import BackpackProblem.Sequential.Item;
 import BackpackProblem.Sequential.Population;
 
+import java.util.List;
+import java.util.Random;
+
 public class Utils {
     public static int calculateCostOfSet(Population population, Boolean[] set){
         int cost = 0;
@@ -27,7 +30,7 @@ public class Utils {
     public static int findSetWithMinWeight(Population population) {
         int minWeight = Integer.MAX_VALUE;
         int index = -1;
-        for (int i = 0; i < Population.COUNT_OF_POPULATIONS; i++) {
+        for (int i = 0; i < population.currentPopulation.length; i++) {
             int currentWeight = calculateWeightOfSet(population, population.currentPopulation[i]);
             if (currentWeight < minWeight) {
                 minWeight = currentWeight;
@@ -40,7 +43,7 @@ public class Utils {
     public static int findSetWithMaxCost(Population population){
         int maxCost = 0;
         int index = -1;
-        for (int i = 0; i < Population.COUNT_OF_POPULATIONS; i++) {
+        for (int i = 0; i < population.currentPopulation.length; i++) {
             int currentCost = calculateCostOfSet(population, population.currentPopulation[i]);
             if (currentCost > maxCost) {
                 maxCost = currentCost;
