@@ -5,13 +5,16 @@ import BackpackProblem.Sequential.Evolution.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Population {
     public static final int COUNT_OF_POPULATIONS = 500;
     public static final int MUTATION_FACTOR = 10; // in range 0 to 100
     public static final int CROSSING_FACTOR = 50; // in range 1 to COUNT_OF_POPULATION
     public static final int CAPACITY = 2500; // max weight of backpack
-    private static final int STOP_CONDITION = 100; // count of the same results in a row
+    private static final int STOP_CONDITION = 5; // count of the same results in a row
 
     public List<Item> items;
     public Boolean[][] currentPopulation;
@@ -21,7 +24,7 @@ public class Population {
     private int sameCostWeightCount = 0;
     private int lastCost = 0;
     private int lastWeight = 0;
-
+    private int numThreads = 8;
     private int iteration = 0;
     public Population(List<Item> items) {
         this.items = items;
@@ -30,36 +33,48 @@ public class Population {
         mutation = new Mutation(this);
         improvement = new LocalImprovement(this);
     }
+    public Population(List<Item> items, Boolean[][] currentPopulation) {
+        this.items = items;
+        this.currentPopulation = currentPopulation;
+        cross = new Crossover(this);
+        mutation = new Mutation(this);
+        improvement = new LocalImprovement(this);
+    }
     public void start() {
+        int subPopulationSize = COUNT_OF_POPULATIONS / numThreads;
+        List<Boolean[][]> subPopulations = new ArrayList<>();
+        for (int i = 0; i < numThreads; i++) {
+            Boolean[][] subPopulation = Arrays.copyOfRange(currentPopulation, i * subPopulationSize, (i + 1) * subPopulationSize);
+            subPopulations.add(subPopulation);
+        }
         initPopulation();
+        ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
+        List<Callable<Object>> todo = new ArrayList<>();
         while (sameCostWeightCount < STOP_CONDITION){
-            int indexOfSetMaxCost = Utils.findSetWithMaxCost(this);
-
-            int random;
-            do {
-                random = (int) (Math.random() * (Population.COUNT_OF_POPULATIONS));
-            } while (random == indexOfSetMaxCost);
-            Boolean[] parent1 = this.currentPopulation[indexOfSetMaxCost];
-            Boolean[] parent2 = this.currentPopulation[random];
-
-            EvolutionThread evolutionThread = new EvolutionThread(this, parent1, parent2);
-            evolutionThread.start();
-            EvolutionThread evolutionThread2 = new EvolutionThread(this, parent2, parent1);
-            evolutionThread2.start();
-
+            for (int i = 0; i < numThreads; i++) {
+                Thread thread = new Thread(new EvolutionThread(new Population(this.items, subPopulations.get(i))));
+                todo.add(Executors.callable(thread));
+            }
             try {
-                evolutionThread.join();
-                evolutionThread2.join();
+                executorService.invokeAll(todo);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
 
             checkResult();
             iteration++;
+
+            for (int i = 0; i < numThreads; i++) {
+                System.arraycopy(subPopulations.get(i), 0, currentPopulation, i * subPopulationSize, subPopulationSize);
+            }
+            //System.out.println(Arrays.toString(currentPopulation[currentPopulation.length - 1]));
+            Utils.shuffle(currentPopulation);
+
             /*if (iteration % 100 == 0) {
                 System.out.println(iteration + "\t\t\t" + lastWeight + "\t\t\t" + lastCost);
             }*/
         }
+        executorService.shutdown();
         /*
         System.out.println("Result: ");
         System.out.println("Iteration: " + iteration);

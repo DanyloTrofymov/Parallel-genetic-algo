@@ -32,4 +32,16 @@ public class Mutation {
         }
         return weight;
     }
+
+    public static Boolean[][] shuffle(Boolean[][] allSets){
+        Boolean[][] shuffledSets = new Boolean[allSets.length][Item.COUNT_OF_ITEMS];
+        Random random = new Random();
+        for(int i = 0; i < allSets.length; i++){
+            int randomIndex = random.nextInt(allSets.length);
+            Boolean[] temp = shuffledSets[i];
+            shuffledSets[i] = shuffledSets[randomIndex];
+            shuffledSets[randomIndex] = temp;
+        }
+        return shuffledSets;
+    }
 }
