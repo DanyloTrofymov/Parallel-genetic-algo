@@ -35,7 +35,7 @@ public class Population {
         initPopulation();
         while (sameCostWeightCount < STOP_CONDITION){
             List<Integer> childrenIndexes= new ArrayList<>();
-            int indexOfSetMaxCost = (int) (Math.random() * (Population.COUNT_OF_POPULATIONS)); //Utils.findSetWithMaxCost(population);
+            int indexOfSetMaxCost = Utils.findSetWithMaxCost(this);
 
             int random;
             do{
