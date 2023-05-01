@@ -13,14 +13,17 @@ public class Crossover {
     }
 
     public int crossover(Boolean[] parent1, Boolean[] parent2, boolean direct){
-
-        Boolean[] child1 = getChild(parent1, parent2);
-
-        int child1Weight = Utils.calculateWeightOfSet(population, child1);
+        Boolean[] child;
+        if(direct) {
+            child = getChild(parent1, parent2);
+        } else {
+            child = getChild(parent2, parent1);
+        }
+        int childWeight = Utils.calculateWeightOfSet(population, child);
         int indexOfSetLessWeight = Utils.findSetWithMinWeight(population);
 
-        if(canInsert(child1Weight, indexOfSetLessWeight)){
-            setPopulation(child1, indexOfSetLessWeight);
+        if(canInsert(childWeight, indexOfSetLessWeight)){
+            setPopulation(child, indexOfSetLessWeight);
             return indexOfSetLessWeight;
         }
 
