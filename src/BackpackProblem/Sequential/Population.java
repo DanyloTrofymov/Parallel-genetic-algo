@@ -25,7 +25,7 @@ public class Population {
         this.currentPopulation = new Boolean[COUNT_OF_POPULATIONS][Item.COUNT_OF_ITEMS];
     }
     public void start() {
-        System.out.println("Iteration \t weight \t cost");
+        //System.out.println("Iteration \t weight \t cost");
         Crossover cross = new Crossover(this);
         Mutation mutation = new Mutation(this);
         LocalImprovement improvement = new LocalImprovement(this);
@@ -54,14 +54,16 @@ public class Population {
 
             checkResult();
             iteration++;
-            if (iteration % 100 == 0) {
+            /*if (iteration % 100 == 0) {
                 System.out.println(iteration + "\t\t\t" + lastWeight + "\t\t\t" + lastCost);
-            }
+            }*/
         }
+        /*
         System.out.println("Result: ");
         System.out.println("Iteration: " + iteration);
         System.out.println("Weight: " + lastWeight);
         System.out.println("Cost: " + lastCost);
+         */
     }
     private void initPopulation(){
         for (int i = 0; i < Item.COUNT_OF_ITEMS; i++) {
