@@ -42,9 +42,9 @@ public class Population {
             Boolean[] parent1 = this.currentPopulation[indexOfSetMaxCost];
             Boolean[] parent2 = this.currentPopulation[random];
 
-            EvolutionThread evolutionThread = new EvolutionThread(this, parent1, parent2, true);
+            EvolutionThread evolutionThread = new EvolutionThread(this, parent1, parent2);
             evolutionThread.start();
-            EvolutionThread evolutionThread2 = new EvolutionThread(this, parent1, parent2, false);
+            EvolutionThread evolutionThread2 = new EvolutionThread(this, parent2, parent1);
             evolutionThread2.start();
 
             try {

@@ -12,19 +12,7 @@ public class Crossover {
         this.population = population;
     }
 
-    public Boolean[] crossover(Boolean[] parent1, Boolean[] parent2, boolean direct){
-
-        Boolean[] child;
-        if(direct){
-            child = getChild(parent1, parent2);
-        } else {
-            child = getChild(parent2, parent1);
-        }
-
-        return child;
-    }
-
-    private Boolean[] getChild(Boolean[] parent1, Boolean[] parent2){
+    public Boolean[] getChild(Boolean[] parent1, Boolean[] parent2){
         Boolean[] child = new Boolean[Item.COUNT_OF_ITEMS];
         for (int i = 0; i < Item.COUNT_OF_ITEMS; i++) {
             if (i < Population.CROSSING_FACTOR) {
