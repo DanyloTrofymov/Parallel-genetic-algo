@@ -6,6 +6,5 @@ public class Main {
         var items = Item.readFromFile("items.txt");;
         Population population = new Population(items);
         population.start();
-        System.out.println(population.currentPopulation);
     }
 }

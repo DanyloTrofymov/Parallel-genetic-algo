@@ -12,35 +12,19 @@ public class Crossover {
         this.population = population;
     }
 
-    public List<Integer> crossover(){
-        List<Integer> childrenIndexes= new ArrayList<>();
-        int indexOfSetMaxCost = (int) (Math.random() * (Population.COUNT_OF_POPULATIONS)); //Utils.findSetWithMaxCost(population);
+    public int crossover(Boolean[] parent1, Boolean[] parent2, boolean direct){
 
-        int random;
-        do{
-            random = (int) (Math.random() * (Population.COUNT_OF_POPULATIONS));
-        }while (random == indexOfSetMaxCost);
-        Boolean[] parent1 = population.currentPopulation[indexOfSetMaxCost];
-        Boolean[] parent2 = population.currentPopulation[random];
         Boolean[] child1 = getChild(parent1, parent2);
-        Boolean[] child2 = getChild(parent2, parent1);
 
         int child1Weight = Utils.calculateWeightOfSet(population, child1);
-        int child2Weight = Utils.calculateWeightOfSet(population, child2);
         int indexOfSetLessWeight = Utils.findSetWithMinWeight(population);
 
         if(canInsert(child1Weight, indexOfSetLessWeight)){
             setPopulation(child1, indexOfSetLessWeight);
-            childrenIndexes.add(indexOfSetLessWeight);
+            return indexOfSetLessWeight;
         }
 
-        indexOfSetLessWeight = Utils.findSetWithMinWeight(population);
-        if(canInsert(child2Weight, indexOfSetLessWeight)){
-            setPopulation(child2, indexOfSetLessWeight);
-            childrenIndexes.add(indexOfSetLessWeight);
-        }
-
-        return childrenIndexes;
+        return -1;
     }
 
     private Boolean[] getChild(Boolean[] parent1, Boolean[] parent2){
