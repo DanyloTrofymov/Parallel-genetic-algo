@@ -1,10 +1,8 @@
 package BackpackProblem.Sequential;
 
-import BackpackProblem.Sequential.Evolution.Crossover;
-import BackpackProblem.Sequential.Evolution.LocalImprovement;
-import BackpackProblem.Sequential.Evolution.Mutation;
-import BackpackProblem.Sequential.Evolution.Utils;
+import BackpackProblem.Sequential.Evolution.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,17 +31,37 @@ public class Population {
         LocalImprovement improvement = new LocalImprovement(this);
         initPopulation();
         while (sameCostWeightCount < STOP_CONDITION){
-            List<Integer> childrenIndexes = cross.crossover();
-            for (Integer childrenIndex : childrenIndexes) {
-                mutation.mutate(childrenIndex);
-                improvement.improve(childrenIndex);
+            int indexOfSetMaxCost = Utils.findSetWithMaxCost(this);
+
+            int random;
+            do {
+                random = (int) (Math.random() * (Population.COUNT_OF_POPULATIONS));
+            } while (random == indexOfSetMaxCost);
+            Boolean[] parent1 = this.currentPopulation[indexOfSetMaxCost];
+            Boolean[] parent2 = this.currentPopulation[random];
+
+            EvolutionThread evolutionThread = new EvolutionThread(this, parent1, parent2, true, cross, mutation, improvement);
+            evolutionThread.start();
+            EvolutionThread evolutionThread2 = new EvolutionThread(this, parent1, parent2, false, cross, mutation, improvement);
+            evolutionThread2.start();
+
+            try {
+                evolutionThread.join();
+                evolutionThread2.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+
             checkResult();
             iteration++;
-            if (iteration % 1 == 0) {
+            if (iteration % 100 == 0) {
                 System.out.println(iteration + "\t\t\t" + lastWeight + "\t\t\t" + lastCost);
             }
         }
+        System.out.println("Result: ");
+        System.out.println("Iteration: " + iteration);
+        System.out.println("Weight: " + lastWeight);
+        System.out.println("Cost: " + lastCost);
     }
     private void initPopulation(){
         for (int i = 0; i < Item.COUNT_OF_ITEMS; i++) {

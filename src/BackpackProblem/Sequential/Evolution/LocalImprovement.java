@@ -9,18 +9,23 @@ public class LocalImprovement {
         this.population = population;
     }
 
-    public void improve(int childIndex){
+    public void improve(int childIndex) {
         int minWeight = calculateMinWeight(childIndex);
         int maxCosMinWeightIndex = findMaxCostMinWeight(childIndex, minWeight);
-        if(maxCosMinWeightIndex != -1){
+        if (maxCosMinWeightIndex != -1) {
             Boolean[] temp = new Boolean[Item.COUNT_OF_ITEMS];
-            System.arraycopy(population.currentPopulation[childIndex], 0, temp, 0, Item.COUNT_OF_ITEMS);
+            synchronized (population.currentPopulation[childIndex]) {
+                System.arraycopy(population.currentPopulation[childIndex], 0, temp, 0, Item.COUNT_OF_ITEMS);
+            }
             temp[maxCosMinWeightIndex] = true;
-            if(calculateWeightOfSet(temp) <= Population.CAPACITY){
-                population.currentPopulation[childIndex][maxCosMinWeightIndex] = true;
+            if (calculateWeightOfSet(temp) <= Population.CAPACITY) {
+                synchronized (population.currentPopulation[childIndex]) {
+                    population.currentPopulation[childIndex][maxCosMinWeightIndex] = true;
+                }
             }
         }
     }
+
 
     public int calculateMinWeight(int childIndex){
         int minWeight = Integer.MAX_VALUE;

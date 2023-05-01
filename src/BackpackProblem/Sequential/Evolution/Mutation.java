@@ -16,10 +16,14 @@ public class Mutation {
         int itemToChange = (int) (Math.random() * Item.COUNT_OF_ITEMS);
         if(mutation <= Population.MUTATION_FACTOR){
             Boolean[] temp = new Boolean[Item.COUNT_OF_ITEMS];
-            System.arraycopy(population.currentPopulation[childIndex], 0, temp, 0, Item.COUNT_OF_ITEMS);
+            synchronized (population.currentPopulation[childIndex]) {
+                System.arraycopy(population.currentPopulation[childIndex], 0, temp, 0, Item.COUNT_OF_ITEMS);
+            }
             temp[itemToChange] = !temp[itemToChange];
             if(calculateWeightOfSet(temp) <= Population.CAPACITY){
-                population.currentPopulation[childIndex][itemToChange] = temp[itemToChange];
+                synchronized (population.currentPopulation[childIndex]) {
+                    population.currentPopulation[childIndex][itemToChange] = temp[itemToChange];
+                }
             }
         }
     }
