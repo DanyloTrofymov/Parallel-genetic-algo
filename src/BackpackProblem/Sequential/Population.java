@@ -7,10 +7,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Population {
-    public static final int COUNT_OF_POPULATIONS = 100;
+    public static final int COUNT_OF_POPULATIONS = 500;
     public static final int MUTATION_FACTOR = 10; // in range 0 to 100
     public static final int CROSSING_FACTOR = 50; // in range 1 to COUNT_OF_POPULATION
-    public static final int CAPACITY = 250; // max weight of backpack
+    public static final int CAPACITY = 2500; // max weight of backpack
     private static final int STOP_CONDITION = 100; // count of the same results in a row
 
     public List<Item> items;
@@ -31,7 +31,6 @@ public class Population {
         improvement = new LocalImprovement(this);
     }
     public void start() {
-        //System.out.println("Iteration \t weight \t cost");
         initPopulation();
         while (sameCostWeightCount < STOP_CONDITION){
             int indexOfSetMaxCost = Utils.findSetWithMaxCost(this);
@@ -69,8 +68,8 @@ public class Population {
          */
     }
     private void initPopulation(){
-        for (int i = 0; i < Item.COUNT_OF_ITEMS; i++) {
-            for (int j = 0; j < COUNT_OF_POPULATIONS; j++) {
+        for (int i = 0; i < COUNT_OF_POPULATIONS; i++) {
+            for (int j = 0; j < Item.COUNT_OF_ITEMS; j++) {
                 currentPopulation[i][j] = i == j;
             }
         }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.PrintWriter;
 public class Item {
-    public static final int COUNT_OF_ITEMS = 100;
+    public static int COUNT_OF_ITEMS = 500;
     public static final int MAX_WEIGHT = 10;
     public static final int MAX_COST = 20;
 
@@ -40,6 +40,7 @@ public class Item {
                 int weight = Integer.parseInt(tokens[1]);
                 int cost = Integer.parseInt(tokens[3]);
                 items.add(new Item(weight, cost));
+            COUNT_OF_ITEMS = items.size();
             }
         } catch (FileNotFoundException e) {
             System.err.format("File not found: %s%n", fileName);
