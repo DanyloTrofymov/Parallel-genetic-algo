@@ -14,7 +14,7 @@ public class Population {
     public static final int MUTATION_FACTOR = 10; // in range 0 to 100
     public static final int CROSSING_FACTOR = 50; // in range 1 to COUNT_OF_POPULATION
     public static final int CAPACITY = 2500; // max weight of backpack
-    private static final int STOP_CONDITION = 5; // count of the same results in a row
+    private static final int STOP_CONDITION = 10000; // total iterations
 
     public List<Item> items;
     public Boolean[][] currentPopulation;
@@ -50,7 +50,7 @@ public class Population {
         initPopulation();
         ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
         List<Callable<Object>> todo = new ArrayList<>();
-        while (sameCostWeightCount < STOP_CONDITION){
+        while (iteration < STOP_CONDITION){
             for (int i = 0; i < numThreads; i++) {
                 Thread thread = new Thread(new EvolutionThread(new Population(this.items, subPopulations.get(i))));
                 todo.add(Executors.callable(thread));
@@ -62,19 +62,18 @@ public class Population {
             }
 
             checkResult();
-            iteration++;
+            iteration += EvolutionThread.MIGRATION_FACTOR * numThreads;
 
             for (int i = 0; i < numThreads; i++) {
                 System.arraycopy(subPopulations.get(i), 0, currentPopulation, i * subPopulationSize, subPopulationSize);
             }
-            //System.out.println(Arrays.toString(currentPopulation[currentPopulation.length - 1]));
             Utils.shuffle(currentPopulation);
 
             /*if (iteration % 100 == 0) {
                 System.out.println(iteration + "\t\t\t" + lastWeight + "\t\t\t" + lastCost);
             }*/
         }
-        System.out.println("lastCost: " + lastCost +  " lastWeight: " + lastWeight);
+        //System.out.println("lastCost: " + lastCost +  " lastWeight: " + lastWeight);
         executorService.shutdown();
         /*
         System.out.println("Result: ");
