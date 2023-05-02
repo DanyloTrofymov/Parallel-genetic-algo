@@ -24,7 +24,7 @@ public class Population {
     private int sameCostWeightCount = 0;
     private int lastCost = 0;
     private int lastWeight = 0;
-    private int numThreads = 8;
+    public int numThreads = 8;
     private int iteration = 0;
     public Population(List<Item> items) {
         this.items = items;
@@ -41,13 +41,9 @@ public class Population {
         improvement = new LocalImprovement(this);
     }
     public void start() {
-        int subPopulationSize = COUNT_OF_POPULATIONS / numThreads;
-        List<Boolean[][]> subPopulations = new ArrayList<>();
-        for (int i = 0; i < numThreads; i++) {
-            Boolean[][] subPopulation = Arrays.copyOfRange(currentPopulation, i * subPopulationSize, (i + 1) * subPopulationSize);
-            subPopulations.add(subPopulation);
-        }
         initPopulation();
+        int subPopulationSize = COUNT_OF_POPULATIONS / numThreads;
+        List<Boolean[][]> subPopulations = getSubsets(currentPopulation, subPopulationSize);
         ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
         List<Callable<Object>> todo = new ArrayList<>();
         while (iteration < STOP_CONDITION){
@@ -67,6 +63,7 @@ public class Population {
             for (int i = 0; i < numThreads; i++) {
                 System.arraycopy(subPopulations.get(i), 0, currentPopulation, i * subPopulationSize, subPopulationSize);
             }
+
             Utils.shuffle(currentPopulation);
 
             /*if (iteration % 100 == 0) {
@@ -103,6 +100,16 @@ public class Population {
             lastCost = newMaxCost;
             lastWeight = newWeight;
         }
+    }
+
+    private List<Boolean[][]> getSubsets(Boolean[][] currentPopulation, int partsCount){
+
+        List<Boolean[][]> subPopulations = new ArrayList<>();
+        for (int i = 0; i < numThreads; i++) {
+            Boolean[][] subPopulation = Arrays.copyOfRange(currentPopulation, i * partsCount, (i + 1) * partsCount);
+            subPopulations.add(subPopulation);
+        }
+        return subPopulations;
     }
 
 }
