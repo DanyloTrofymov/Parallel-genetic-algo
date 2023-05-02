@@ -10,10 +10,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Population {
-    public static final int COUNT_OF_POPULATIONS = 500;
+    public static int COUNT_OF_POPULATIONS = 500;
     public static final int MUTATION_FACTOR = 10; // in range 0 to 100
     public static final int CROSSING_FACTOR = 50; // in range 1 to COUNT_OF_POPULATION
-    public static final int CAPACITY = 2500; // max weight of backpack
+    public static int CAPACITY = 2500; // max weight of backpack
     private static final int STOP_CONDITION = 10000; // total iterations
 
     public List<Item> items;
@@ -42,12 +42,13 @@ public class Population {
     }
     public void start() {
         initPopulation();
-        int subPopulationSize = COUNT_OF_POPULATIONS / numThreads;
-        List<Boolean[][]> subPopulations = getSubpopulations(currentPopulation, subPopulationSize);
+        int countOfSubpopulations = numThreads;
+        int subPopulationSize = COUNT_OF_POPULATIONS / countOfSubpopulations;
+        List<Boolean[][]> subPopulations = getSubpopulations(currentPopulation, subPopulationSize, countOfSubpopulations);
         ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
         List<Callable<Object>> todo = new ArrayList<>();
         while (iteration < STOP_CONDITION){
-            for (int i = 0; i < numThreads; i++) {
+            for (int i = 0; i < countOfSubpopulations; i++) {
                 Thread thread = new Thread(new EvolutionThread(new Population(this.items, subPopulations.get(i))));
                 todo.add(Executors.callable(thread));
             }
@@ -58,9 +59,9 @@ public class Population {
             }
 
             checkResult();
-            iteration += EvolutionThread.MIGRATION_FACTOR * numThreads;
+            iteration += EvolutionThread.MIGRATION_FACTOR * countOfSubpopulations;
 
-            for (int i = 0; i < numThreads; i++) {
+            for (int i = 0; i < countOfSubpopulations; i++) {
                 System.arraycopy(subPopulations.get(i), 0, currentPopulation, i * subPopulationSize, subPopulationSize);
             }
 
@@ -102,11 +103,11 @@ public class Population {
         }
     }
 
-    private List<Boolean[][]> getSubpopulations(Boolean[][] currentPopulation, int partsCount){
+    private List<Boolean[][]> getSubpopulations(Boolean[][] currentPopulation, int partsSize, int countOfSubpopulations){
 
         List<Boolean[][]> subPopulations = new ArrayList<>();
-        for (int i = 0; i < numThreads; i++) {
-            Boolean[][] subPopulation = Arrays.copyOfRange(currentPopulation, i * partsCount, (i + 1) * partsCount);
+        for (int i = 0; i < countOfSubpopulations; i++) {
+            Boolean[][] subPopulation = Arrays.copyOfRange(currentPopulation, i * partsSize, (i + 1) * partsSize);
             subPopulations.add(subPopulation);
         }
         return subPopulations;
