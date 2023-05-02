@@ -5,15 +5,13 @@ import BackpackProblem.Sequential.Evolution.LocalImprovement;
 import BackpackProblem.Sequential.Evolution.Mutation;
 import BackpackProblem.Sequential.Evolution.Utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Population {
-    public static final int COUNT_OF_POPULATIONS = 500;
+    public static int COUNT_OF_POPULATIONS = 500;
     public static final int MUTATION_FACTOR = 10; // in range 0 to 100
     public static final int CROSSING_FACTOR = 50; // in range 1 to COUNT_OF_POPULATION
-    public static final int CAPACITY = 250; // max weight of backpack
+    public static int CAPACITY = 250; // max weight of backpack
     private static final int STOP_CONDITION = 10000; // number of total iteration
 
     private Crossover cross;

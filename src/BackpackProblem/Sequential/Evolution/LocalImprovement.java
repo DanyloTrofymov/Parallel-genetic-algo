@@ -14,7 +14,7 @@ public class LocalImprovement {
         int maxCosMinWeightIndex = findMaxCostMinWeight(child, minWeight);
         if (maxCosMinWeightIndex != -1) {
             child[maxCosMinWeightIndex] = true;
-            int weight = calculateWeightOfSet(child);
+            int weight = Utils.calculateWeightOfSet(population, child);
             if (weight > Population.CAPACITY) {
                 child[maxCosMinWeightIndex] = false;
             }
@@ -42,14 +42,5 @@ public class LocalImprovement {
             }
         }
         return index;
-    }
-    private int calculateWeightOfSet(Boolean[] set){
-        int weight = 0;
-        for (int i = 0; i < Item.COUNT_OF_ITEMS; i++) {
-            if (set[i]) {
-                weight += population.items.get(i).weight;
-            }
-        }
-        return weight;
     }
 }
