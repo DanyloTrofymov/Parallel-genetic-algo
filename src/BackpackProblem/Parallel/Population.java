@@ -43,7 +43,7 @@ public class Population {
     public void start() {
         initPopulation();
         int subPopulationSize = COUNT_OF_POPULATIONS / numThreads;
-        List<Boolean[][]> subPopulations = getSubsets(currentPopulation, subPopulationSize);
+        List<Boolean[][]> subPopulations = getSubpopulations(currentPopulation, subPopulationSize);
         ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
         List<Callable<Object>> todo = new ArrayList<>();
         while (iteration < STOP_CONDITION){
@@ -102,7 +102,7 @@ public class Population {
         }
     }
 
-    private List<Boolean[][]> getSubsets(Boolean[][] currentPopulation, int partsCount){
+    private List<Boolean[][]> getSubpopulations(Boolean[][] currentPopulation, int partsCount){
 
         List<Boolean[][]> subPopulations = new ArrayList<>();
         for (int i = 0; i < numThreads; i++) {
