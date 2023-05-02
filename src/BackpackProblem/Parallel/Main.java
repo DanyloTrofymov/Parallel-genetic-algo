@@ -1,4 +1,4 @@
-package BackpackProblem.Sequential;
+package BackpackProblem.Parallel;
 
 public class Main {
     public static void main(String[] args) {

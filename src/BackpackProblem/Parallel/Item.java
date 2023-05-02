@@ -1,4 +1,4 @@
-package BackpackProblem.Sequential;
+package BackpackProblem.Parallel;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -1,6 +1,6 @@
-package BackpackProblem.Sequential;
+package BackpackProblem.Parallel;
 
-import BackpackProblem.Sequential.Evolution.*;
+import BackpackProblem.Parallel.Evolution.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;

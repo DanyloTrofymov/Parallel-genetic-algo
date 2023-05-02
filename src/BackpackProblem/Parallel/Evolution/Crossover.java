@@ -1,10 +1,7 @@
-package BackpackProblem.Sequential.Evolution;
+package BackpackProblem.Parallel.Evolution;
 
-import BackpackProblem.Sequential.Item;
-import BackpackProblem.Sequential.Population;
-
-import java.util.ArrayList;
-import java.util.List;
+import BackpackProblem.Parallel.Item;
+import BackpackProblem.Parallel.Population;
 
 public class Crossover {
     Population population;

@@ -1,7 +1,7 @@
-package BackpackProblem.Sequential.Evolution;
+package BackpackProblem.Parallel.Evolution;
 
-import BackpackProblem.Sequential.Item;
-import BackpackProblem.Sequential.Population;
+import BackpackProblem.Parallel.Item;
+import BackpackProblem.Parallel.Population;
 
 
 public class EvolutionThread extends Thread {
