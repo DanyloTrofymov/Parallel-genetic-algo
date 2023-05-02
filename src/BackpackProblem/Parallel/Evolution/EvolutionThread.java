@@ -47,7 +47,7 @@ public class EvolutionThread extends Thread {
         }
 
     }
-    private synchronized void setPopulation(Boolean[] set, int indexOfSet){
+    private void setPopulation(Boolean[] set, int indexOfSet){
         System.arraycopy(set, 0, population.currentPopulation[indexOfSet], 0, Item.COUNT_OF_ITEMS);
     }
 

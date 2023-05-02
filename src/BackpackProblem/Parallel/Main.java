@@ -11,7 +11,6 @@ public class Main {
             population.start();
             long endTime = System.currentTimeMillis();
             System.out.println((endTime - startTime));
-//        System.out.println(population.currentPopulation);
         }
     }
 }
