@@ -6,7 +6,7 @@ import BackpackProblem.Parallel.Population;
 
 public class EvolutionThread extends Thread {
 
-    public static final int MIGRATION_FACTOR = 10;
+    public static int MIGRATION_FACTOR = 10;
     Population population;
     public EvolutionThread (Population population) {
         this.population = population;

@@ -40,9 +40,9 @@ public class Population {
         mutation = new Mutation(this);
         improvement = new LocalImprovement(this);
     }
-    public void start() {
+    public void start(double cofficientOfSubpopulation) {
         initPopulation();
-        int countOfSubpopulations = numThreads;
+        int countOfSubpopulations = (int) (numThreads * cofficientOfSubpopulation);
         int subPopulationSize = COUNT_OF_POPULATIONS / countOfSubpopulations;
         List<Boolean[][]> subPopulations = getSubpopulations(currentPopulation, subPopulationSize, countOfSubpopulations);
         ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
@@ -78,7 +78,7 @@ public class Population {
         System.out.println("Iteration: " + iteration);
         System.out.println("Weight: " + lastWeight);
         System.out.println("Cost: " + lastCost);
-         */
+           */
     }
     private void initPopulation(){
         for (int i = 0; i < COUNT_OF_POPULATIONS; i++) {
