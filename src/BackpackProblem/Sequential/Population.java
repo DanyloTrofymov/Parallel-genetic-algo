@@ -5,6 +5,9 @@ import BackpackProblem.Sequential.Evolution.LocalImprovement;
 import BackpackProblem.Sequential.Evolution.Mutation;
 import BackpackProblem.Sequential.Evolution.Utils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.List;
 
 public class Population {
@@ -74,12 +77,10 @@ public class Population {
             }
              */
         }
-        /*
-        System.out.println("Result: ");
+        /*System.out.println("Result: ");
         System.out.println("Iteration: " + iteration);
         System.out.println("Weight: " + lastWeight);
-        System.out.println("Cost: " + lastCost);
-         */
+        System.out.println("Cost: " + lastCost);*/
     }
     private void initPopulation(){
         for (int i = 0; i < Item.COUNT_OF_ITEMS; i++) {
@@ -113,5 +114,21 @@ public class Population {
             return true;
         }
         return false;
+    }
+    public void writeToFile(String fileName) {
+        try {
+            Boolean[] bestSet = currentPopulation[Utils.findSetWithMaxCost(this)];
+            PrintWriter printWriter = new PrintWriter(new File(fileName));
+            printWriter.println("Weight: " + lastWeight);
+            printWriter.println("Cost: " + lastCost);
+            for (int i = 0; i < bestSet.length; i++) {
+                if(bestSet[i]) {
+                    printWriter.println(items.get(i));
+                }
+            }
+            printWriter.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
