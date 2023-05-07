@@ -24,7 +24,7 @@
         var items = Item.generateItems();
         System.out.println("Count of population: " + Population.COUNT_OF_POPULATIONS +
                 "\nCount of items:" + Item.COUNT_OF_ITEMS + "\nBackpack capacity: " + Population.CAPACITY);
-        for (int i = 0; i < 1; i++){
+        for (int i = 0; i < 20; i++){
 
 
             Population population = new Population(items);
