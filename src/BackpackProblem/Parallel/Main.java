@@ -10,9 +10,11 @@ public class Main {
         int countOfPopulations= 50;
         int backpackCapacity = 25;
 
-        List<Integer> coefficient  = List.of(1, 5, 10, 15, 20);//List.of(1, 2, 3, 5, 7, 10, 15, 20);
+        List<Integer> coefficient  = List.of(5, 10, 15, 20);//List.of(1, 2, 3, 5, 7, 10, 15, 20);
         coefficient.forEach(k -> {
+            System.out.println("Coefficient: " + k);
             startCoeficientTest(countOfItems*k, countOfPopulations*k, backpackCapacity*k);
+            System.out.println();
         });
         List<Integer> numOfThreads  = List.of(4, 8, 16);
         List<Double> coeficientsOfPopulation = List.of(0.5, 1.0, 2.0, 4.0);
@@ -37,7 +39,7 @@ public class Main {
         var items = Item.generateItems();
         System.out.println("Count of population: " + Population.COUNT_OF_POPULATIONS +
                 "\nCount of items:" + Item.COUNT_OF_ITEMS + "\nBackpack capacity: " + Population.CAPACITY);
-        for (int i = 0; i < 20; i++){
+        for (int i = 0; i < 1; i++){
 
 
             Population population = new Population(items);
@@ -45,7 +47,8 @@ public class Main {
             long startTime = System.currentTimeMillis();
             population.start(1);
             long endTime = System.currentTimeMillis();
-            System.out.println((endTime - startTime));
+            //System.out.println((endTime - startTime));
+            population.writeToFile("result.txt");
         }
     }
     private static void startNumOfThreadsTest(int numOfThreads){
@@ -78,7 +81,7 @@ public class Main {
             long startTime = System.currentTimeMillis();
             population.start(1);
             long endTime = System.currentTimeMillis();
-            //System.out.println((endTime - startTime));
+            System.out.println((endTime - startTime));
         }
     }
     private static void startCoeficientOfPopulationsTest(double coeficientOfPopulation){
